@@ -2,7 +2,7 @@
 
 Aplicação feita em **ReactJS** que consome a [API do TMDB](https://developer.themoviedb.org/) para buscar filmes, exibir detalhes e gerenciar uma lista de favoritos persistida em `localStorage`.
 
-Deploy disponível em: **👉[Clique aqui para testar](https://github.com/leo-gouvea/busca-filmes)**  
+Deploy disponível em: **👉[Clique aqui para testar](https://leo-gouvea.github.io/busca-filmes/)**  
 
 ---
 
@@ -31,7 +31,7 @@ Deploy disponível em: **👉[Clique aqui para testar](https://github.com/leo-go
 
 ```bash
 # Clonar repositório
-git clone https://leo-gouvea.github.io/busca-filmes/
+git clone https://github.com/leo-gouvea/busca-filmes
 
 # Entrar na pasta
 cd /busca-filmes/
