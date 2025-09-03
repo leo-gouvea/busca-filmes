@@ -31,10 +31,10 @@ Deploy disponível em: **👉[Clique aqui para testar](https://leo-gouvea.github
 
 ```bash
 # Clonar repositório
-git clone https://github.com/SEU-USUARIO/SEU-REPO.git
+git clone https://leo-gouvea.github.io/busca-filmes/
 
 # Entrar na pasta
-cd SEU-REPO
+cd /busca-filmes/
 
 # Instalar dependências
 npm install
