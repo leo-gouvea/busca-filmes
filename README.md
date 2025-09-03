@@ -1,4 +1,4 @@
-# 🎬 Movie Explorer (React + TMDB)
+# 🎬 Busca Filmes (React + TMDB)
 
 Aplicação feita em **ReactJS** que consome a [API do TMDB](https://developer.themoviedb.org/) para buscar filmes, exibir detalhes e gerenciar uma lista de favoritos persistida em `localStorage`.
 
