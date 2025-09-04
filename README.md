@@ -41,4 +41,3 @@ npm install
 
 # Rodar em modo dev
 npm run dev
->>>>>>> 63d492a872df0ff4976a73ba77ef948efdfe0ec6
