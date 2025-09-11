@@ -2,17 +2,23 @@ import "../styles/global.css";
 import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 import MovieCard from "../components/MovieCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Favorites() {
   const { favorites, toggle, isFavorite } = useFavorites();
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const moviesPerPage = 10; // 2 linhas x 5 colunas
+  const moviesPerPage = 10;
   const totalPages = Math.ceil(favorites.length / moviesPerPage);
 
-  // pega apenas os filmes da página atual
+  // Corrige a página atual se ela estiver fora do limite
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages || 1);
+    }
+  }, [favorites, totalPages]);
+
   const startIndex = (page - 1) * moviesPerPage;
   const currentMovies = favorites.slice(startIndex, startIndex + moviesPerPage);
 
@@ -37,12 +43,30 @@ export default function Favorites() {
           </div>
 
           {/* Controles de paginação */}
-          <div style={{ marginTop: "20px", display: "flex", gap: "10px", justifyContent: "center" }}>
-            <button onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <button
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page <= 1}
+            >
               ◀ Anterior
             </button>
-            <span>Página {page} de {totalPages}</span>
-            <button onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>
+
+            <span>
+              Página {page} de {totalPages || 1}
+            </span>
+
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= totalPages || totalPages === 0}
+            >
               Próxima ▶
             </button>
           </div>

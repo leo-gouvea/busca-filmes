@@ -2,21 +2,29 @@
 export function SkeletonCard() {
   return (
     <div className="movie-card">
-      <div className="skeleton skeleton-poster" />
-      <div className="skeleton skeleton-line skeleton-title" />
-      <div className="skeleton skeleton-line skeleton-small" />
-      <div className="skeleton skeleton-btn" />
+      <div className="poster skeleton skeleton-poster" />
+      <div className="card-info">
+        <div className="skeleton skeleton-line skeleton-title" />
+        <div className="skeleton skeleton-line skeleton-small" />
+      </div>
+      <div className="fav-btn">
+        <div className="skeleton skeleton-btn" />
+      </div>
     </div>
   );
 }
 
+
+
+
+
 export function SkeletonGrid({ count = 10 }) {
   return (
-    <div className="movies-grid">
+    <>
       {Array.from({ length: count }).map((_, i) => (
         <SkeletonCard key={i} />
       ))}
-    </div>
+    </>
   );
 }
 

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { tmdb } from "../api/tmdb";
 import MovieCard from "../components/MovieCard";
+import { SkeletonGrid } from "../components/Skeletons";
 import { useFavorites } from "../context/FavoritesContext";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../context/SearchContext";
@@ -9,9 +11,10 @@ export default function Home() {
   const { toggle, isFavorite } = useFavorites();
   const navigate = useNavigate();
 
-  const moviesPerPage = 10; // 2 linhas x 5 colunas
-  const totalPages = Math.ceil(results.length / moviesPerPage);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const moviesPerPage = 10;
+  const totalPages = Math.ceil(results.length / moviesPerPage);
   const startIndex = (page - 1) * moviesPerPage;
   const currentMovies = results.slice(startIndex, startIndex + moviesPerPage);
 
@@ -19,12 +22,29 @@ export default function Home() {
     e.preventDefault();
     if (!searchTerm.trim()) return;
 
+    setIsLoading(true);
+
     try {
-      const res = await tmdb.get("/search/movie", { params: { query: searchTerm } });
-      setResults(res.data.results);
-      setPage(1); // reseta para página 1 em nova busca
+      let allResults = [];
+      let currentPage = 1;
+      let totalPages = 1;
+
+      do {
+        const res = await tmdb.get("/search/movie", {
+          params: { query: searchTerm, page: currentPage },
+        });
+
+        allResults = [...allResults, ...res.data.results];
+        totalPages = Math.min(res.data.total_pages, 50);
+        currentPage++;
+      } while (currentPage <= totalPages);
+
+      setResults(allResults);
+      setPage(1);
     } catch {
       console.error("Erro ao buscar filmes.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -49,22 +69,26 @@ export default function Home() {
         <button type="submit">Buscar</button>
       </form>
 
-      {results.length === 0 && <p>Nenhum resultado ainda.</p>}
+      {isLoading && <p>Carregando filmes... isso pode levar alguns segundos.</p>}
+      {!isLoading && results.length === 0 && <p>Nenhum resultado ainda.</p>}
 
       <div className="movies-grid">
-        {currentMovies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            isFav={isFavorite(movie.id)}
-            onToggleFav={toggle}
-            onOpen={() => navigate(`/details/${movie.id}`)}
-          />
-        ))}
+        {isLoading ? (
+          <SkeletonGrid count={10} />
+        ) : (
+          currentMovies.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              isFav={isFavorite(movie.id)}
+              onToggleFav={toggle}
+              onOpen={() => navigate(`/details/${movie.id}`)}
+            />
+          ))
+        )}
       </div>
 
-      {/* Paginação */}
-      {results.length > 0 && (
+      {!isLoading && results.length > 0 && (
         <div
           style={{
             marginTop: "20px",
